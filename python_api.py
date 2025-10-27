@@ -36,17 +36,30 @@ def getDataByOrderId(_id: str):
         return {"message": "No data available"}
     
 
-# 2.Build a GET endpoint, that returns all customer_names based on the region.    
-@app.get("/getDetails/{_customer_name}")
-def getDetailsByCustomerNames(_customer_name: str):
-    if shipping_api:
-        _customer_name_upper = _customer_name.strip().upper()
-        for rec in shipping_api:
-            if rec.get("customer_name","").strip().upper() == _customer_name_upper:
-                return rec
-        return {"message": "Data doesn't exist"}
+# 2.Build a GET endpoint, that returns all customer_names based on the region.   
+
+customer_names=[]
+@app.get("/customer-data/{_region}")
+def GetDataRegion(_region:str):
+    if shipping_Api:
+        __region=_region.strip().upper()
+        for rec2 in shipping_Api:
+            if rec2.get("region").strip().upper()==__region:
+                customer_names.append(rec2.get("customer_name"))
+        return customer_names
     else:
-        return {"message": "No data available"}
+        return {"data not exist"}
+        
+# @app.get("/getDetails/{_customer_name}")
+# def getDetailsByCustomerNames(_customer_name: str):
+#     if shipping_api:
+#         _customer_name_upper = _customer_name.strip().upper()
+#         for rec in shipping_api:
+#             if rec.get("customer_name","").strip().upper() == _customer_name_upper:
+#                 return rec
+#         return {"message": "Data doesn't exist"}
+#     else:
+#         return {"message": "No data available"}
 
 
     
@@ -104,4 +117,5 @@ def delete_data(_order_id:str):
                 return {"message": "data successfully deleted"}
         return {"message": "data doesn't exists"}
     else:
+
         return {"message": "database doesn't exists"}
